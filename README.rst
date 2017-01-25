@@ -19,84 +19,10 @@ Documentation: `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`
 What?
 -----
 
-Arrow is a Python library that offers a sensible, human-friendly approach to creating, manipulating, formatting and converting dates, times, and timestamps.  It implements and updates the datetime type, plugging gaps in functionality, and provides an intelligent module API that supports many common creation scenarios.  Simply put, it helps you work with dates and times with fewer imports and a lot less code.
+Bow is my personal fork of [Arrow](https://github.com/crsmithdev/arrow) for increased performance. So far I've focused on the DateTimeParser and porting it over to Cython.
 
-Arrow is heavily inspired by `moment.js <https://github.com/timrwood/moment>`_ and `requests <https://github.com/kennethreitz/requests>`_
 
 Why?
 ----
+When creating data pipelines, parsing dates is one of the slowest operations. The default cpython implementation of `strptime` is very slow. At least according to annecdotal experience and other experiments such as [this](https://aboutsimon.com/blog/2016/08/04/datetime-vs-Arrow-vs-Pendulum-vs-Delorean-vs-udatetime.html). For an ingestion job that needs to say parse 1 million dates, around 5 minutes will be spent parsing dates (depending on machine). These optimizations are yielding anywhere from 30%-1000% performance increases depending on the use case. 
 
-Python's standard library and some other low-level modules have near-complete date, time and time zone functionality but don't work very well from a usability perspective:
-
-- Too many modules:  datetime, time, calendar, dateutil, pytz and more
-- Too many types:  date, time, datetime, tzinfo, timedelta, relativedelta, etc.
-- Time zones and timestamp conversions are verbose and unpleasant 
-- Time zone naievety is the norm
-- Gaps in functionality:  ISO-8601 parsing, timespans, humanization
-
-Features 
---------
-
-- Fully implemented, drop-in replacement for datetime 
-- Supports Python 2.6, 2.7, 3.3, 3.4 and 3.5
-- Time zone-aware & UTC by default
-- Provides super-simple creation options for many common input scenarios
-- Updated .replace method with support for relative offsets, including weeks
-- Formats and parses strings automatically
-- Partial support for ISO-8601
-- Timezone conversion
-- Timestamp available as a property
-- Generates time spans, ranges, floors and ceilings in timeframes from year to microsecond
-- Humanizes and supports a growing list of contributed locales
-- Extensible for your own Arrow-derived types
-
-Quick start
------------
-
-First:
-
-.. code-block:: console
-
-    $ pip install arrow
-
-And then:
-
-.. code-block:: pycon
-
-    >>> import arrow
-    >>> utc = arrow.utcnow()
-    >>> utc
-    <Arrow [2013-05-11T21:23:58.970460+00:00]>
-
-    >>> utc = utc.replace(hours=-1)
-    >>> utc
-    <Arrow [2013-05-11T20:23:58.970460+00:00]>
-
-    >>> local = utc.to('US/Pacific')
-    >>> local
-    <Arrow [2013-05-11T13:23:58.970460-07:00]>
-
-    >>> arrow.get('2013-05-11T21:23:58.970460+00:00')
-    <Arrow [2013-05-11T21:23:58.970460+00:00]>
-
-    >>> local.timestamp
-    1368303838
-
-    >>> local.format()
-    '2013-05-11 13:23:58 -07:00'
-
-    >>> local.format('YYYY-MM-DD HH:mm:ss ZZ')
-    '2013-05-11 13:23:58 -07:00'
-
-    >>> local.humanize()
-    'an hour ago'
-
-    >>> local.humanize(locale='ko_kr')
-    '1시간 전'
-    
-Further documentation can be found at `arrow.readthedocs.org <http://arrow.readthedocs.org/en/latest/>`_
-
-Contributing
-------------
-
-Contributions are welcome, especially with localization.  See `locales.py <https://github.com/crsmithdev/arrow/blob/master/arrow/locales.py>`_ for what's currently supported.
