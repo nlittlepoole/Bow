@@ -1,4 +1,4 @@
-Arrow - Better dates & times for Python
+Bow -  ̶B̶e̶t̶t̶e̶r̶ Faster dates & times for Python
 =======================================
 
 .. image:: https://travis-ci.org/crsmithdev/arrow.svg
